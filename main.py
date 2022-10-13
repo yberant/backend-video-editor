@@ -17,7 +17,7 @@ load_dotenv()
 
 #durante test de serv-serv. este se corre en windows
 
-PORT=os.getenv("PORT")#7555
+PORT=int(os.getenv("PORT"))#7555
 STR_FORMAT = "utf-8"
 DATE_FORMAT = "%Y-%m-%d %H-%M-%S"
 #TODO: CAMBIAR POR socket.gethostbyname(socket.gethostname())
