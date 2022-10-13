@@ -5,9 +5,9 @@ import os
 STR_FORMAT = "utf-8"
 
 #TODO: CAMBIAR ESTO PARA CUANDO SE HAGA DEPLOY. ¿SEGURIDAD?
-MIRROR_IP = "192.168.1.10"# #socket.gethostbyname(socket.gethostname()) #"172.17.202.149" 
-MIRROR_PORT = 7555
-MEDIA_FOLDER = "media"
+MIRROR_IP = os.getenv("MIRROR_IP")#"192.168.1.10"# #socket.gethostbyname(socket.gethostname()) #"172.17.202.149" 
+MIRROR_PORT = os.getenv("MIRROR_PORT")#7555
+MEDIA_FOLDER = os.getenv("MEDIA_DIR")#"media"
 
 #TODO: pedirle al socket del servidor cosas
 

@@ -17,14 +17,14 @@ load_dotenv()
 
 #durante test de serv-serv. este se corre en windows
 
-PORT=7555
+PORT=os.getenv("PORT")#7555
 STR_FORMAT = "utf-8"
 DATE_FORMAT = "%Y-%m-%d %H-%M-%S"
 #TODO: CAMBIAR POR socket.gethostbyname(socket.gethostname())
-IP = sys.argv[1] #"172.17.202.149"#socket.gethostbyname(socket.gethostname())
+IP = os.getenv("IP")#sys.argv[1] #"172.17.202.149"#socket.gethostbyname(socket.gethostname())
 ADRESS = (IP, PORT)
 #TODO: ACTUALMENTE COMO SE TRABAJA EN LOCAL SE USA OTRA CARPETA MEDIA PARA SIMULAR LOS ARCHIVOS LOCALES DE OTRO SERVIDOR REMOTO (EN COMUNICACIÓN SERVIDOR). CAMBIAR A MEDIA PARA FUTURO
-MEDIA_DIR = "media2" 
+MEDIA_DIR = os.getenv("MEDIA_DIR")#"media2" 
 #TODO: VER TEMA DE SEGURIDAD CON ESTO 
 MIRROR_PASS_SSH = os.getenv("MIRROR_PASS_SSH")
 MIRROR_USER_SSH = os.getenv("MIRROR_USER_SSH")
