@@ -1,7 +1,9 @@
 import ffmpeg
 import os
 
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 #segments = [{'file_name': 'Adn.air.cl 2022-09-01 23-00-00.mp3', 'time_start': '0:40:00', 'time_end': '1:00:00', 'location': 'local'}, {'file_name': 'Adn.air.cl 2022-09-02 00-00-00.mp3', 'time_start': '0:00:00', 'time_end': '1:00:00', 'location': 'local'}, {'file_name': 'Adn.air.cl 2022-09-02 01-00-00.mp3', 'time_start': '0:00:00', 'time_end': '1:00:00', 'location': 'local'}, {'file_name': 'Adn.air.cl 2022-09-02 02-00-00.mp3', 'time_start': '0:00:00', 'time_end': '1:00:00', 'location': 'local'}, {'file_name': 'Adn.air.cl 2022-09-02 03-00-00.mp3', 'time_start': '0:00:00', 'time_end': '0:40:00', 'location': 'local'}]
@@ -10,7 +12,7 @@ segments = [{'file_name': 'Adn.air.cl 2022-09-02 02-00-00.mp3', 'time_start': '0
 class Concatter:
 
 
-    def __init__(self, input_file_name="input.txt", tmp_folder_name = "tmp", media_dir = "../media/"):
+    def __init__(self, input_file_name="input.txt", tmp_folder_name = "tmp", media_dir = os.getenv("MEDIA_DIR")):
         self.input_file_name = input_file_name
         self.tmp_folder_name = tmp_folder_name
         self.media_dir = media_dir

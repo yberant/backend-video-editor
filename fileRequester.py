@@ -2,6 +2,11 @@ import paramiko
 import socket
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 STR_FORMAT = "utf-8"
 
 #TODO: CAMBIAR ESTO PARA CUANDO SE HAGA DEPLOY. ¿SEGURIDAD?

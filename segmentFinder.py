@@ -6,8 +6,14 @@ from threading import local
 
 from fileRequester import FileRequester
 
-MEDIA_FOLDER = "media"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MEDIA_FOLDER = load_dotenv()
 DATE_FORMAT = "%Y-%m-%d %H-%M-%S"
+
+
 
 
 #TODO: TENER EN CUENTA ARCHIVOS CORRUPTOS SIN EOF. HAY QUE CHEQUEAR SI CUMPLEN CON EL TIEMPO SUFICIENTE PARA EL SEGMENTO Y BUSCAR EOF
