@@ -14,8 +14,8 @@ STR_FORMAT = "utf-8"
 
 
 CHANNEL = "40Principales.air.cl"#sys.argv[1]
-TIMESTAMP_START = "2022-07-15 08-30-00"#sys.argv[2]
-TIMESTAMP_END= "2022-07-15 09-10-00"#sys.argv[3]
+TIMESTAMP_START = "2022-10-17 03-40-00"#sys.argv[2]
+TIMESTAMP_END= "2022-10-17 05-10-00"#sys.argv[3]
 EXTENTION = "mp3"#sys.argv[4]
 
 SERVER_ADRESS_1 = (SERVER_IP_1, SERVER_PORT)

@@ -2,7 +2,8 @@ import socket
 import os
 import sys
 from typing import final
-import paramiko
+#import paramiko
+import pysftp
 from concatter import Concatter
 from segmentFinder import DATE_FORMAT, SegmentFinder
 from datetime import datetime, timedelta
@@ -29,6 +30,7 @@ MEDIA_DIR = os.getenv("MEDIA_DIR")#"media2"
 MIRROR_PASS_SSH = os.getenv("MIRROR_PASS_SSH")
 MIRROR_USER_SSH = os.getenv("MIRROR_USER_SSH")
 MIRROR_PORT_SSH = int(os.getenv("MIRROR_PORT_SSH"))
+PRIVATE_KEY_FILE_PATH = os.getenv("PRIVATE_KEY_FILE_PATH")
 
 #TODO: CAMBIAR ESTO. IP DESDE CUAL SE RECIBIRÁ SOLICITUDES DE SEGMENTOS Y A LA CUAL HAY QUE MANDAR
 MIRROR_IP = "192.168.169.243"#socket.gethostbyname(socket.gethostname())#"172.17.202.149"
@@ -181,6 +183,7 @@ class Main:
         #espero la query con archivos solicitados
         files_msg = self.conn.recv(4000).decode(STR_FORMAT) # TODO: DISCUTIR EL TAMAÑO DEL BUFFER?
         print("mensaje de solicitud de archivos recibido")
+        print("mensaje: ",files_msg)
 
         #chequeo si el formato está correcto
         for file_data in files_msg.split("::")[1:]:
@@ -191,38 +194,41 @@ class Main:
                 return
 
         channel_name =  files_msg.split("::")[0]
+        print("nombre del canal: ",channel_name)
 
 
         #mando un working
         res_msg = "WORKING"
         self.conn.send(res_msg.encode(STR_FORMAT))
 
+        print("working enviado")
 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname=MIRROR_IP, username=MIRROR_USER_SSH, password=MIRROR_PASS_SSH, port=MIRROR_PORT_SSH)
 
-        
-        sftp_client = ssh.open_sftp()
-        print(sftp_client)
+        #ssh = paramiko.SSHClient()
+        #ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        #ssh.connect(hostname=MIRROR_IP, username=MIRROR_USER_SSH, password=MIRROR_PASS_SSH, port=MIRROR_PORT_SSH)
+        with pysftp.Connection(host=MIRROR_IP, port=MIRROR_PORT_SSH, username=MIRROR_USER_SSH, private_key=PRIVATE_KEY_FILE_PATH) as sftp_client:
+            print("ssh configurado")
+            #sftp_client = ssh.open_sftp()
+            #print(sftp_client)
 
-        transfered_files = []
+            transfered_files = []
 
-        for file_data in files_msg.split("::")[1:]:
-            file_name, file_dst_dir = file_data.split("__")
-            
+            for file_data in files_msg.split("::")[1:]:
+                file_name, file_dst_dir = file_data.split("__")
+                
 
-            #reviso si el archivo solicitado está en este servidor
-            file_dir_local = os.path.join(os.path.join(MEDIA_DIR, channel_name), file_name)
-            print("revisando si está: ",file_dir_local)
-            if os.path.exists(file_dir_local):
-                print("transfiriendo a ",file_dst_dir)
-                #sftp_client.get(file_dir_local,file_dst_dir)
-                sftp_client.put(file_dir_local, file_dst_dir)
-                transfered_files.append(file_name)
+                #reviso si el archivo solicitado está en este servidor
+                file_dir_local = os.path.join(os.path.join(MEDIA_DIR, channel_name), file_name)
+                print("revisando si está: ",file_dir_local)
+                if os.path.exists(file_dir_local):
+                    print("transfiriendo a ",file_dst_dir)
+                    #sftp_client.get(file_dir_local,file_dst_dir)
+                    sftp_client.put(file_dir_local, file_dst_dir)
+                    transfered_files.append(file_name)
 
-        sftp_client.close()
-        ssh.close()
+        #sftp_client.close()
+        #ssh.close()
 
         done_msg = f"FILES TRANSFERED::{'__'.join(transfered_files)}"
         self.conn.send(done_msg.encode(STR_FORMAT))
